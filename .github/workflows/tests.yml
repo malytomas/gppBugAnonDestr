@@ -79,7 +79,7 @@ jobs:
     steps:
     - name: Install packages
       run: |
-        sudo apt-get install -y xorg-dev nasm ${{ matrix.compiler.install }}
+        sudo apt-get install -y ${{ matrix.compiler.install }}
 
     - name: Versions
       run: |
@@ -101,7 +101,7 @@ jobs:
     - name: Build
       run: |
         cd build
-        cmake --build . --config ${{ matrix.build-config }} -- -j3
+        VERBOSE=1 cmake --build . --config ${{ matrix.build-config }} -- -j3
 
     - name: Tests
       run: |
