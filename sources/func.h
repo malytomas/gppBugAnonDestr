@@ -151,6 +151,3 @@ public:
 		delete (T *)ptr;
 	}
 };
-
-MemoryArena &systemMemory();
-
