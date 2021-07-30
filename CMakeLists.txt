@@ -15,7 +15,7 @@ set(sources
   sources/func.h
   sources/func.cpp
 )
-add_library(func SHARED ${sources})
+add_library(func STATIC ${sources})
 
 set(sources
   sources/common.h

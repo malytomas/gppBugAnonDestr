@@ -1,17 +1,3 @@
-#if defined(_MSC_VER)
-#define CAGE_API_EXPORT __declspec(dllexport)
-#define CAGE_API_IMPORT __declspec(dllimport)
-#else
-#define CAGE_API_EXPORT [[gnu::visibility("default")]]
-#define CAGE_API_IMPORT [[gnu::visibility("default")]]
-#endif
-
-#ifdef CAGE_FUNC_EXPORT
-#define CAGE_CORE_API CAGE_API_EXPORT
-#else
-#define CAGE_CORE_API CAGE_API_IMPORT
-#endif
-
 #include <cstdint>
 #include <utility>
 
@@ -153,7 +139,7 @@ inline void *operator new[](uintPtr size, void *ptr, OperatorNewTrait) noexcept 
 inline void operator delete(void *ptr, void *ptr2, OperatorNewTrait) noexcept {}
 inline void operator delete[](void *ptr, void *ptr2, OperatorNewTrait) noexcept {}
 
-struct CAGE_CORE_API MemoryArena
+struct MemoryArena
 {
 public:
 	void *allocate(uintPtr size, uintPtr alignment);
@@ -193,5 +179,5 @@ public:
 	}
 };
 
-CAGE_CORE_API MemoryArena &systemMemory();
+MemoryArena &systemMemory();
 
