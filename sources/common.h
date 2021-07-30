@@ -25,27 +25,6 @@ public:
 		return *this;
 	}
 
-	template<class D, R(*F)(D, Ts...)>
-	Delegate &bind(D d) noexcept
-	{
-		static_assert(sizeof(d) <= sizeof(inst));
-		static_assert(std::is_trivially_copyable_v<D> && std::is_trivially_destructible_v<D>);
-		union U
-		{
-			void *p;
-			D d;
-		};
-		fnc = +[](void *inst, Ts... vs) {
-			U u;
-			u.p = inst;
-			return F(u.d, std::forward<Ts>(vs)...);
-		};
-		U u;
-		u.d = d;
-		inst = u.p;
-		return *this;
-	}
-
 	template<class C, R(C:: *F)(Ts...)>
 	Delegate &bind(C *i) noexcept
 	{
@@ -54,22 +33,6 @@ public:
 		};
 		inst = i;
 		return *this;
-	}
-
-	template<class C, R(C:: *F)(Ts...) const>
-	Delegate &bind(const C *i) noexcept
-	{
-		fnc = +[](void *inst, Ts... vs) {
-			return (((const C *)inst)->*F)(std::forward<Ts>(vs)...);
-		};
-		inst = const_cast<C *>(i);
-		return *this;
-	}
-
-	constexpr void clear() noexcept
-	{
-		inst = nullptr;
-		fnc = nullptr;
 	}
 
 	constexpr R operator ()(Ts... vs) const
@@ -116,7 +79,7 @@ struct Holder
 		{
 			deleter_(data_);
 			data_ = nullptr;
-			deleter_.clear();
+			deleter_ = {};
 		}
 	}
 
