@@ -148,22 +148,22 @@ namespace
 
 	int *runTest()
 	{
-		if (Tester::counter != 0) // sanity check
-			throw;
+		if (Tester::counter != 0)
+			throw "failed sanity check";
 		{
 			MemoryArena mem;
 			{
 				Holder<Tester> arr[42] = {};
 				for (auto &it : arr)
 					it = mem.createHolder<Tester>();
-				if (Tester::counter != 42) // test constructors
-					throw;
+				if (Tester::counter != 42)
+					throw "constructors not called";
 				for (auto &it : arr)
 					it->execute();
 			}
 		}
-		if (Tester::counter != 0) // test destructors
-			throw;
+		if (Tester::counter != 0)
+			throw "destructors not called";
 		return &Tester::counter;
 	}
 }
