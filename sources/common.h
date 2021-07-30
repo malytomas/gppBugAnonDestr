@@ -36,15 +36,13 @@ namespace
 		if (Tester::counter != 0) // sanity check
 			throw;
 		{
-			Tester *arr[42] = {};
+			Holder<Tester> arr[42] = {};
 			for (auto &it : arr)
-				it = create<Tester>();
+				it = systemMemory().createHolder<Tester>();
 			if (Tester::counter != 42) // test constructors
 				throw;
 			for (auto &it : arr)
 				it->execute();
-			for (auto &it : arr)
-				execute(&destroy<Tester>, it);
 		}
 		if (Tester::counter != 0) // test destructors
 			throw;
