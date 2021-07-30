@@ -11,5 +11,9 @@ endforeach(conf)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if(NOT MSVC)
+	set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+endif()
+
 file(GLOB sources "sources/*")
 add_executable(gppBugAnonDestr ${sources})
