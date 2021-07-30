@@ -18,6 +18,7 @@ int main()
 	catch (const char *str)
 	{
 		printf("%s\n", str);
+		fflush(stdout);
 		throw;
 	}
 }
