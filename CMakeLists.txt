@@ -11,5 +11,18 @@ endforeach(conf)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB sources "sources/*")
+set(sources
+  sources/func.h
+  sources/func.cpp
+)
+add_library(func STATIC ${sources})
+
+set(sources
+  sources/common.h
+  sources/func.h
+  sources/main.cpp
+  sources/aaa.cpp
+  sources/bbb.cpp
+)
 add_executable(gppBugAnonDestr ${sources})
+target_link_libraries(gppBugAnonDestr PUBLIC func)

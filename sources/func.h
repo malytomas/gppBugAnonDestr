@@ -1,4 +1,3 @@
-
 template<class T>
 inline T *create()
 {

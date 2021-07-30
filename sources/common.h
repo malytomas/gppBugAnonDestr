@@ -1,4 +1,3 @@
-
 #include "func.h"
 
 // ANONYMOUS! namespace
