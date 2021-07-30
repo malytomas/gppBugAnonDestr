@@ -1,4 +1,6 @@
 
+#include "func.h"
+
 // ANONYMOUS! namespace
 namespace
 {
@@ -35,11 +37,15 @@ namespace
 		if (Tester::counter != 0) // sanity check
 			throw;
 		{
-			Tester arr[42] = {};
+			Tester *arr[42] = {};
+			for (auto &it : arr)
+				it = create<Tester>();
 			if (Tester::counter != 42) // test constructors
 				throw;
 			for (auto &it : arr)
-				it.execute();
+				it->execute();
+			for (auto &it : arr)
+				destroy<Tester>(it);
 		}
 		if (Tester::counter != 0) // test destructors
 			throw;
