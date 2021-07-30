@@ -32,7 +32,7 @@ namespace
 		}
 	};
 
-	void runTest()
+	int *runTest()
 	{
 		if (Tester::counter != 0) // sanity check
 			throw;
@@ -49,5 +49,6 @@ namespace
 		}
 		if (Tester::counter != 0) // test destructors
 			throw;
+		return &Tester::counter;
 	}
 }

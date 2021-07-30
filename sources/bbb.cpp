@@ -1,7 +1,7 @@
 #include "common.h"
 
-void runBbb()
+int *runBbb()
 {
-	runTest();
+	return runTest();
 }
 

@@ -1,7 +1,7 @@
 #include "common.h"
 
-void runAaa()
+int *runAaa()
 {
-	runTest();
+	return runTest();
 }
 
