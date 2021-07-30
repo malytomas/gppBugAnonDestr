@@ -9,5 +9,7 @@ foreach(conf IN ITEMS ${CMAKE_CONFIGURATION_TYPES} ${CMAKE_BUILD_TYPE})
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${conf_upper} "${CMAKE_BINARY_DIR}/${conf_lower}")
 endforeach(conf)
 
+set(CMAKE_CXX_STANDARD 17)
+
 file(GLOB sources "sources/*")
 add_executable(gppBugAnonDestr ${sources})
