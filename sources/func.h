@@ -106,7 +106,6 @@ struct Holder
 {
 	Holder() noexcept = default;
 
-	template<class T>
 	Holder(T *data, Delegate<void(void *)> deleter): data_(data), deleter_(deleter)
 	{}
 
