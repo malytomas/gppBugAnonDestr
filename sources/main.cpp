@@ -1,5 +1,3 @@
-#include "func.h"
-
 int *runAaa();
 int *runBbb();
 
