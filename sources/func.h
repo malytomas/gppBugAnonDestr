@@ -66,11 +66,6 @@ public:
 		return *this;
 	}
 
-	constexpr explicit operator bool() const noexcept
-	{
-		return !!fnc;
-	}
-
 	constexpr void clear() noexcept
 	{
 		inst = nullptr;
@@ -132,32 +127,13 @@ protected:
 
 // memory arena
 
-struct OperatorNewTrait {};
-
-inline void *operator new(uintPtr size, void *ptr, OperatorNewTrait) noexcept { return ptr; }
-inline void *operator new[](uintPtr size, void *ptr, OperatorNewTrait) noexcept { return ptr; }
-inline void operator delete(void *ptr, void *ptr2, OperatorNewTrait) noexcept {}
-inline void operator delete[](void *ptr, void *ptr2, OperatorNewTrait) noexcept {}
-
 struct MemoryArena
 {
 public:
-	void *allocate(uintPtr size, uintPtr alignment);
-	void deallocate(void *ptr);
-
 	template<class T, class... Ts>
 	T *createObject(Ts... vs)
 	{
-		void *ptr = allocate(sizeof(T), alignof(T));
-		try
-		{
-			return new(ptr, OperatorNewTrait()) T(std::forward<Ts>(vs)...);
-		}
-		catch (...)
-		{
-			deallocate(ptr);
-			throw;
-		}
+		return new T(std::forward<Ts>(vs)...);
 	}
 
 	template<class T, class... Ts>
@@ -172,10 +148,7 @@ public:
 	template<class T>
 	void destroy(void *ptr)
 	{
-		if (!ptr)
-			return;
-		((T *)ptr)->~T();
-		deallocate(ptr);
+		delete (T *)ptr;
 	}
 };
 
