@@ -83,6 +83,7 @@ jobs:
 
     - name: Versions
       run: |
+        lsb_release -a
         cmake --version
         ${{ matrix.compiler.cc }} --version
         ${{ matrix.compiler.cxx }} --version
