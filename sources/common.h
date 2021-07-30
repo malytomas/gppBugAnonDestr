@@ -45,7 +45,7 @@ namespace
 			for (auto &it : arr)
 				it->execute();
 			for (auto &it : arr)
-				destroy<Tester>(it);
+				execute(&destroy<Tester>, it);
 		}
 		if (Tester::counter != 0) // test destructors
 			throw;

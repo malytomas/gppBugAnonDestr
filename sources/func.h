@@ -10,3 +10,7 @@ inline void destroy(void *ptr)
 {
 	delete (T *)ptr;
 }
+
+using Fnc = void (*)(void *);
+
+void execute(Fnc fnc, void *ptr);
