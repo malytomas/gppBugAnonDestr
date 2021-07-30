@@ -3,41 +3,28 @@
 
 using uintPtr = std::uintptr_t;
 
-// delegates
+struct MemoryArena;
 
-template<class T>
-struct Delegate;
+// delegate
 
-template<class R, class... Ts>
-struct Delegate<R(Ts...)>
+struct Delegate
 {
 private:
-	R(*fnc)(void *, Ts...) = nullptr;
-	void *inst = nullptr;
+	void (MemoryArena::*fnc)(void*) = nullptr;
+	MemoryArena *inst = nullptr;
 
 public:
-	template<R(*F)(Ts...)>
-	constexpr Delegate &bind() noexcept
+	template<void(MemoryArena::*F)(void *)>
+	Delegate &bind(MemoryArena *i) noexcept
 	{
-		fnc = +[](void *inst, Ts... vs) {
-			return F(std::forward<Ts>(vs)...);
-		};
-		return *this;
-	}
-
-	template<class C, R(C:: *F)(Ts...)>
-	Delegate &bind(C *i) noexcept
-	{
-		fnc = +[](void *inst, Ts... vs) {
-			return (((C *)inst)->*F)(std::forward<Ts>(vs)...);
-		};
+		fnc = F;
 		inst = i;
 		return *this;
 	}
 
-	constexpr R operator ()(Ts... vs) const
+	constexpr void operator ()(void *p) const
 	{
-		return fnc(inst, std::forward<Ts>(vs)...);
+		(inst->*fnc)(p);
 	}
 };
 
@@ -50,7 +37,7 @@ struct Holder
 {
 	Holder() noexcept = default;
 
-	Holder(T *data, Delegate<void(void *)> deleter) : data_(data), deleter_(deleter)
+	Holder(T *data, Delegate deleter) : data_(data), deleter_(deleter)
 	{}
 
 	Holder &operator = (Holder &&other) noexcept
@@ -85,7 +72,7 @@ struct Holder
 
 protected:
 	T *data_ = nullptr;
-	Delegate<void(void *)> deleter_;
+	Delegate deleter_;
 };
 
 // memory arena
@@ -103,8 +90,8 @@ public:
 	Holder<T> createHolder(Ts... vs)
 	{
 		T *ptr = createObject<T>(std::forward<Ts>(vs)...);
-		Delegate<void(void *)> del;
-		del.template bind<MemoryArena, &MemoryArena::destroy<T>>(this);
+		Delegate del;
+		del.template bind<&MemoryArena::destroy<T>>(this);
 		return Holder<T>(ptr, del);
 	};
 
